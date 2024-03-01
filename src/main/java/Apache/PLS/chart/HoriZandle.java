@@ -1,19 +1,16 @@
 package Apache.PLS.chart;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xddf.usermodel.chart.*;
+import org.apache.poi.xwpf.usermodel.XWPFChart;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xddf.usermodel.*;
-import org.apache.poi.xddf.usermodel.chart.*;
-import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
-
-public final class BarChart {
-
+public class HoriZandle {
     private static NewCh readJsonFile() throws IOException {
         String string = "{\n" +
                 "    \"chartTitle\": \"BarChart\",\n" +
@@ -32,7 +29,7 @@ public final class BarChart {
         NewCh newCh = readJsonFile();
         XWPFDocument doc = new XWPFDocument();
 
-        OutputStream out = new FileOutputStream("C:\\Users\\balajimohan.SYMBIANCE\\Downloads\\vertical.docx");
+        OutputStream out = new FileOutputStream("C:\\Users\\balajimohan.SYMBIANCE\\Downloads\\HoriZandle.docx");
         XWPFChart chart = doc.createChart(XDDFChart.DEFAULT_WIDTH * 10, XDDFChart.DEFAULT_HEIGHT * 5);
         setBarData(chart, newCh);
         doc.write(out);
@@ -47,7 +44,7 @@ public final class BarChart {
         leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
         leftAxis.setMajorTickMark(AxisTickMark.OUT);
         leftAxis.setCrossBetween(AxisCrossBetween.BETWEEN);
-        leftAxis.getOrAddMajorGridProperties();
+        leftAxis.getOrAddMinorGridProperties();
         leftAxis.getOrAddShapeProperties();
         leftAxis.setVisible(true);
         final int numOfPoints = newCh.getCategories().size();
@@ -62,8 +59,8 @@ public final class BarChart {
         newCh.getValues1().set(0, 16.0);
 
 
-        XDDFBarChartData bar = (XDDFBarChartData) chart.createData(ChartTypes.BAR, bottomAxis, leftAxis);
-        bar.setBarGrouping(BarGrouping.CLUSTERED);
+        XDDFChartData bar = chart.createData(ChartTypes.BAR, bottomAxis, leftAxis);
+//        bar.setBarGrouping(BarGrouping.CLUSTERED);
 
         XDDFBarChartData.Series series1 = (XDDFBarChartData.Series) bar.addSeries(categoriesData, valuesData);
         series1.setTitle(s[0], chart.setSheetTitle(s[COLUMN_COUNTRIES - 1], COLUMN_COUNTRIES));
@@ -92,13 +89,13 @@ public final class BarChart {
             }
         }
         bar.setVaryColors(false);
-        bar.setBarDirection(BarDirection.COL);
-        bar.setGapWidth(100);
+//        bar.setBarDirection(BarDirection.COL);
+//        bar.setGapWidth(100);
 
         chart.plot(bar);
 
         XDDFChartLegend legend = chart.getOrAddLegend();
-        legend.setPosition(LegendPosition.LEFT);
+        legend.setPosition(LegendPosition.BOTTOM);
 
         chart.setTitleText(newCh.getChartTitle());
         chart.setTitleOverlay(false);
@@ -112,3 +109,5 @@ public final class BarChart {
     private static final int COLUMN_COUNTRIES = 1;
     private static final int COLUMN_SPEAKERS = 2;
 }
+
+

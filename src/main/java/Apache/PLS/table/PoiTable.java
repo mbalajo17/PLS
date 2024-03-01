@@ -31,11 +31,9 @@ public class PoiTable {
         table.setTableAlignment(TableRowAlign.LEFT);
         table.setWidth("90%");
 
-        BigInteger pos1 = BigInteger.valueOf(4500);
-        BigInteger pos2 = BigInteger.valueOf(9000);
-
+//        table.getRow(0).setHeight(999);
         table.getRow(0).getCell(0).getCTTc().addNewTcPr().addNewTcW().setW("39%"); // Sets the first column to 4500
-        table.getRow(0).getCell(1).getCTTc().addNewTcPr().addNewTcW().setW("63%"); // Sets the second column to 9000
+        table.getRow(0).getCell(1).getCTTc().addNewTcPr().addNewTcW().setW("61%");  // Sets the second column to 9000
 
         int rowIndex = 0;
 
@@ -53,25 +51,33 @@ public class PoiTable {
             }
 
             XWPFParagraph paragraph1 = row.getCell(0).getParagraphs().get(0);
+            String trimmedText1 = StringUtils.normalizeSpace(key);
+
             paragraph1.setAlignment(ParagraphAlignment.LEFT);
-            paragraph1.setIndentationLeft(200);
-            paragraph1.setIndentationRight(200);
-            row.getCell(0).setText(key);
+            paragraph1.setIndentationLeft(100);
+            paragraph1.setIndentationRight(100);
+            paragraph1.setSpacingAfter(0);
+            row.getCell(0).setText(trimmedText1);
+
 
             if (StringUtils.containsIgnoreCase(key, "Date")) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
                 String currentDate = dateFormat.format(new Date());
                 XWPFParagraph paragraph = row.getCell(1).getParagraphs().get(0);
                 paragraph.setAlignment(ParagraphAlignment.LEFT);
-                paragraph.setIndentationLeft(200);
-                paragraph.setIndentationRight(200);
+                paragraph.setIndentationLeft(100);
+                paragraph.setIndentationRight(100);
+                paragraph.setSpacingAfter(0);
+
                 row.getCell(1).setText(currentDate);
             } else {
                 String trimmedText = StringUtils.normalizeSpace(value);
                 XWPFParagraph paragraph = row.getCell(1).getParagraphs().get(0);
                 paragraph.setAlignment(ParagraphAlignment.LEFT);
-                paragraph.setIndentationLeft(200);
-                paragraph.setIndentationRight(200);
+                paragraph.setIndentationLeft(100);
+                paragraph.setIndentationRight(100);
+                paragraph.setSpacingAfter(0);
+
                 row.getCell(1).setText(trimmedText);
             }
             rowIndex++;
@@ -82,9 +88,9 @@ public class PoiTable {
         out.close();
     }
 
-    // Method to set the background color for a row
     private static void setRowColor(XWPFTableRow row, String color) {
         for (XWPFTableCell cell : row.getTableCells()) {
+            cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
             CTTcPr tcpr = cell.getCTTc().getTcPr();
             if (tcpr == null) tcpr = cell.getCTTc().addNewTcPr();
             CTShd ctshd = tcpr.isSetShd() ? tcpr.getShd() : tcpr.addNewShd();
