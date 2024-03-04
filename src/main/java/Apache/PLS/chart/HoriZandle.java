@@ -48,11 +48,11 @@ public class HoriZandle {
         leftAxis.getOrAddShapeProperties();
         leftAxis.setVisible(true);
         final int numOfPoints = newCh.getCategories().size();
-        final String categoryDataRange = chart.formatRange(new CellRangeAddress(1, numOfPoints, 0, 0));
+        final String categoryDataRange = chart.formatRange(new CellRangeAddress(1, numOfPoints, COLUMN_LANGUAGES, COLUMN_LANGUAGES));
         final String valuesDataRange = chart.formatRange(new CellRangeAddress(1, numOfPoints, COLUMN_COUNTRIES, COLUMN_COUNTRIES));
-        final String valuesDataRange2 = chart.formatRange(new CellRangeAddress(1, numOfPoints, 1, 1));
+        final String valuesDataRange2 = chart.formatRange(new CellRangeAddress(1, numOfPoints, COLUMN_SPEAKERS, COLUMN_SPEAKERS));
         String[] s = newCh.getCategories().toArray(new String[0]);
-        final XDDFDataSource<?> categoriesData = XDDFDataSourcesFactory.fromArray(s, categoryDataRange, 0);
+        final XDDFDataSource<?> categoriesData = XDDFDataSourcesFactory.fromArray(s, categoryDataRange, COLUMN_LANGUAGES);
 
         final XDDFNumericalDataSource<? extends Number> valuesData = XDDFDataSourcesFactory.fromArray(newCh.getValues1().toArray(new Number[0]), valuesDataRange, COLUMN_COUNTRIES);
         valuesData.setFormatCode("General");
@@ -63,7 +63,7 @@ public class HoriZandle {
 //        bar.setBarGrouping(BarGrouping.CLUSTERED);
 
         XDDFBarChartData.Series series1 = (XDDFBarChartData.Series) bar.addSeries(categoriesData, valuesData);
-        series1.setTitle(s[0], chart.setSheetTitle(s[COLUMN_COUNTRIES - 1], COLUMN_COUNTRIES));
+        series1.setTitle(newCh.getSeries().get(0), chart.setSheetTitle(newCh.getSeries().get(0), COLUMN_COUNTRIES));
         byte[] colors = new byte[]{(byte) 3, (byte) 155, (byte) 229};
 
         int pointCount = series1.getCategoryData().getPointCount();
@@ -74,11 +74,11 @@ public class HoriZandle {
         }
         if (newCh.getValues2() != null) {
             final XDDFNumericalDataSource<? extends Number> valuesData2 =
-                    XDDFDataSourcesFactory.fromArray(newCh.getValues2().toArray(new Number[0]), valuesDataRange2, COLUMN_COUNTRIES);
+                    XDDFDataSourcesFactory.fromArray(newCh.getValues2().toArray(new Number[0]), valuesDataRange2, COLUMN_SPEAKERS);
             valuesData2.setFormatCode("General");
 
             XDDFBarChartData.Series series2 = (XDDFBarChartData.Series) bar.addSeries(categoriesData, valuesData2);
-            series2.setTitle(newCh.getSeries().get(1), chart.setSheetTitle(newCh.getSeries().get(1), COLUMN_COUNTRIES));
+            series2.setTitle(newCh.getSeries().get(1), chart.setSheetTitle(newCh.getSeries().get(1), COLUMN_SPEAKERS));
 
             byte[] colors1 = new byte[]{(byte) 0, (byte) 150, (byte) 136};
             int pointCount1 = series2.getCategoryData().getPointCount();
